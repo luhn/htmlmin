@@ -77,7 +77,11 @@ class HTMLMinMiddleware(object):
     is_html = False
     flag_header = None
     for header, value in headers:
-      if not is_html and header == 'Content-Type' and value == 'text/html':
+      if(
+        not is_html and
+        header == 'Content-Type' and
+        value.partition(';')[0] == 'text/html'
+      ):
         is_html = True
         if flag_header is not None:
           break

@@ -489,6 +489,20 @@ class TestMiddleware(HTMLMinTestCase):
       '    X    Y   ')
     self.assertEqual(body, ' X Y ')
 
+  def test_middlware_charset(self):
+    app = HTMLMinMiddleware(self.wsgi_app)
+    status, headers, body = self.call_app(
+      app, '200 OK', (('Content-Type', 'text/html; charset=UTF-8'),),
+      '    X    Y   ')
+    self.assertEqual(body, ' X Y ')
+
+  def test_middlware_non_html(self):
+    app = HTMLMinMiddleware(self.wsgi_app)
+    status, headers, body = self.call_app(
+      app, '200 OK', (('Content-Type', 'text/css'),),
+      '    X    Y   ')
+    self.assertEqual(body, '    X    Y   ')
+
   def test_middlware_minifier_options(self):
     app = HTMLMinMiddleware(self.wsgi_app, remove_comments=True)
     status, headers, body = self.call_app(
